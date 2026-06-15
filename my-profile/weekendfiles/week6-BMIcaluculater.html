@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BMIcaluculator</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-full h-screen bg-sky-500 flex justify-center items-center">
+  <div class="w-1/2 bg-white rounded-xl shadow-xl flex flex-col items-center gap-5 p-10">
+
+    <span class="text-3xl">BMI Caluculator</span>
+
+    <div class="grid grid-cols-2 gap-10 px-10 ">
+
+      <div class="flex flex-col gap-2.5">
+        <label class="block text-2xl">身長(cm)</label>
+        <img src="./imgs for week/mono41135273-220301-02.avif" alt="sinntyousokuteiki">
+        <input id="sinntyou" type="number" placeholder="ここに記入" 
+              class="text-gray-700 rounded-xl py-1 pl-2 pr-5 border border-gray-700">
+      </div>
+
+      <div class="flex flex-col gap-3">
+        <label class="block text-2xl">体重(kg)</label>
+        <img src="./imgs for week/81DHIyoFcWL._AC_UF894,1000_QL80_.jpg" alt="taijuukei">
+        <input id="taijuu" type="number" placeholder="ここに記入" 
+              class="text-gray-700 rounded-xl py-1 pl-2 pr-5 border border-gray-700">
+      </div>
+      
+    </div>
+
+    <button id="button" class="bg-blue-500 text-white rounded hover:bg-blue-800 py-2 px-20">計算する</button>
+
+    <span id="result1" class="text-3xl"></span>
+    <span id="result2" class="text-xl"></span>
+  </div>
+
+  <script>
+    function calBMI (high,wide){
+      const sinntyouM = high / 100;
+      return wide / (sinntyouM * sinntyouM);
+    }
+
+    function hitokoto (bmi){
+      if (bmi>25){
+        return "デブ";
+      }else if (bmi<25&&bmi>=18.5){
+        return "普通やな";
+      }else if (bmi<18.5){
+        return "ガリ";
+      }
+    }
+
+    const button =document.querySelector("#button");
+    const result1 =document.querySelector("#result1");
+    const result2 =document.querySelector("#result2");
+
+    button.addEventListener("click",() =>{
+
+      const high = Number(document.querySelector("#sinntyou").value);
+      const wide = Number(document.querySelector("#taijuu").value);
+
+      if (high<=0 ||wide<=0 ) {
+        result1.textContent= "※身長・体重を記入してください";
+        return;
+      }
+
+      const bmi = calBMI (high,wide);
+      const oneword = hitokoto (bmi);
+
+      result1.textContent = "あなたのBMIは" + bmi.toFixed(1) + "です";
+      result2.textContent = oneword;
+    });
+
+  </script>
+</body>
+</html>
