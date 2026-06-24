@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teammember</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text2xl font-bold mb-6">チームメンバー</h1>
+    <div class="flex items-center gap-1 pb-3 py-2">
+        <label class="block">名前</label>
+        <input id="name" type="text" placeholder="例：山田 太郎" class="rounded">
+
+        <label class="block pl-5">仕事</label>
+        <input id="role" type="text" placeholder="例：公務員" class="rounded">
+
+        <label class="block pl-5">仕事に関するコメント</label>
+        <input id="comment" type="text" placeholder="例：チームで活動するときまとめ役ができます" class="w-1/4 rounded">
+
+        <button id="tuika" class="bg-blue-600 text-white px-5 py-2 rounded-xl hover:bg-blue-700 ml-10">追加</button>
+    </div>
+    <span id="keikoku" class="text-2xl"></span>
+    <div id="memberList" class="grid gap-4"></div>
+
+    <script>
+        const button = document.querySelector("#tuika");
+        const warn = document.querySelector("#keikoku");
+        const memberList= document.querySelector("#memberList");
+
+
+        const members = [
+            { name:"田中 太郎", role:"デザイナー", comment:"UIにこだわっています"},
+            { name:"鈴木 花子", role:"エンジニア", comment:"バックエンドが得意です"},
+            { name:"佐藤 次郎", role:"PdM", comment:"ユーザー視点を大切に"}
+        ];
+
+        members.forEach((member)=>{
+            const card = document.createElement("div");
+            card.className="bg-white rounded-lg shadow p-4";
+
+            card.innerHTML=`
+            <h2 class="text-lg font-bold ">${member.name}</h2>
+            <p class="text-blue-600 text-sm">${member.role}</p>
+            <p class="text-gray-600 mt-2">${member.comment}</p>
+        `;
+        memberList.appendChild(card);
+        });
+
+
+
+        button.addEventListener("click",() => {
+            const name = document.querySelector("#name").value;
+            const role = document.querySelector("#role").value;
+            const comment = document.querySelector("#comment").value;
+
+            if (name==="" || role==="" || comment===""){
+                warn.textContent="名前・仕事・コメントを全て記入してください"
+                return;
+            }
+
+            warn.textContent="";
+            members.push ({name:name, role:role, comment:comment});
+
+            const card = document.createElement("div");
+            card.className="bg-white rounded-lg shadow p-4";
+
+            card.innerHTML=`
+            <h2 class="text-lg font-bold ">${name}</h2>
+            <p class="text-blue-600 text-sm">${role}</p>
+            <p class="text-gray-600 mt-2">${comment}</p>
+            `;
+            memberList.appendChild(card);
+
+            document.querySelector("#name").value = "";
+            document.querySelector("#role").value = "";
+            document.querySelector("#comment").value = "";
+        
+        });
+
+    </script>
+</body>
+</html>

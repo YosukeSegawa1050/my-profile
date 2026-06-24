@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="w-full h-screen bg-sky-100 flex justify-center items-center justify-center">
+    <main class="bg-white gap-3 rounded-xl p-5">
+        <h1>ToDo List</h1>
+        <input id="input" type="text" placeholder="タスクを入力"
+            class="border border-black rounded-xl pl-2 py-1">
+        <button id="button" class="text-white bg-blue-500 hover:bg-blue-700 rounded-xl px-8">決定</button>
+        <div id="list"></div>
+    </main>
+    
+    <script>
+        const button = document.querySelector("#button");
+        const li = document.querySelector("#list");
+        
+        button.addEventListener("click",()=>{
+            const input = document.querySelector("#input").value;
+
+            if (input === ""){
+                return;
+            }
+            const card = document.createElement("div");
+            card.className = "bg-white border border-black rounded-xl flex justify-between px-3 my-3 py-1";
+
+            const nakami = document.createElement("span");
+            nakami.textContent = input;
+
+            const kannryou = document.createElement("button");
+            kannryou.textContent = "完了";
+            kannryou.className = "text-sm hover:text-gray-500";
+            kannryou.addEventListener("click",()=>{
+                nakami.classList.toggle("line-through");
+                nakami.classList.toggle("text-gray-500");
+            });
+
+            card.appendChild(nakami);
+            card.appendChild(kannryou);
+            li.appendChild(card);
+
+            document.querySelector("#input").value = "";
+        });
+    </script>
+</body>
+</html>
