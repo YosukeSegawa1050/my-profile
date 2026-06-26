@@ -37,6 +37,12 @@
             kannryou.addEventListener("click",()=>{
                 nakami.classList.toggle("line-through");
                 nakami.classList.toggle("text-gray-500");
+                
+                if (nakami.classList.contains("line-through")){
+                    kannryou.textContent="戻す";
+                }else  {
+                    kannryou.textContent="完了";
+                }
             });
 
             card.appendChild(nakami);

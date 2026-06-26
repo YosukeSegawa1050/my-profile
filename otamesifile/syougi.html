@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>将棋対戦ゲーム</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <main id="ban" class="w-1/2 mx-auto mt-5 bg-amber-500 grid grid-cols-9 grid-rows-9 gap-[1px] p-[1px] aspect-square shadow-lg ">       
+    </main>
+    
+    <script>
+        const ban = document.querySelector("#ban");
+
+        const TeamA = [
+            {name:"香車",role:"kyousya", uni:"kyousyaA",x:1,y:1},
+            {name:"桂馬",role:"keima"  , uni:"keimaA"  ,x:2,y:1},
+            {name:"銀" , role:"ginn"   , uni:"ginnA"   ,x:3,y:1},
+            {name:"金" , role:"kinn"   , uni:"kinnA"   ,x:4,y:1},
+            {name:"王"  , role:"ou"                    ,x:5,y:1},
+            {name:"金" , role:"kinn"   , uni:"kinnB"   ,x:6,y:1},
+            {name:"銀" , role:"ginn"   , uni:"ginnB"   ,x:7,y:1},
+            {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:1},
+            {name:"香車",role:"kyousya", uni:"kyousyaB",x:9,y:1},
+
+            {name:"飛車", role:"hisya"                 ,x:2,y:2},
+            {name:"角"  , role:"kaku"                  ,x:8,y:2},
+
+            {name:"歩" , role:"hu1" , uni:"hu1"        ,x:1,y:3},
+            {name:"歩" , role:"hu2" , uni:"hu2"        ,x:2,y:3},
+            {name:"歩" , role:"hu3" , uni:"hu3"        ,x:3,y:3},
+            {name:"歩" , role:"hu4" , uni:"hu4"        ,x:4,y:3},
+            {name:"歩" , role:"hu5" , uni:"hu5"        ,x:5,y:3},
+            {name:"歩" , role:"hu6" , uni:"hu6"        ,x:6,y:3},
+            {name:"歩" , role:"hu7" , uni:"hu7"        ,x:7,y:3},
+            {name:"歩" , role:"hu8" , uni:"hu8"        ,x:8,y:3},
+            {name:"歩" , role:"hu9" , uni:"hu9"        ,x:9,y:3},
+
+        ];
+
+        const TeamB = [
+            {name:"歩" , role:"hu1" , uni:"hu1"        ,x:1,y:7},
+            {name:"歩" , role:"hu2" , uni:"hu2"        ,x:2,y:7},
+            {name:"歩" , role:"hu3" , uni:"hu3"        ,x:3,y:7},
+            {name:"歩" , role:"hu4" , uni:"hu4"        ,x:4,y:7},
+            {name:"歩" , role:"hu5" , uni:"hu5"        ,x:5,y:7},
+            {name:"歩" , role:"hu6" , uni:"hu6"        ,x:6,y:7},
+            {name:"歩" , role:"hu7" , uni:"hu7"        ,x:7,y:7},
+            {name:"歩" , role:"hu8" , uni:"hu8"        ,x:8,y:7},
+            {name:"歩" , role:"hu9" , uni:"hu9"        ,x:9,y:7},
+
+            {name:"角"  , role:"kaku"                  ,x:2,y:8},
+            {name:"飛車", role:"hisya"                 ,x:8,y:8},
+
+            {name:"香車",role:"kyousya", uni:"kyousyaA",x:1,y:9},
+            {name:"桂馬",role:"keima"  , uni:"keimaA"  ,x:2,y:9},
+            {name:"銀" , role:"ginn"   , uni:"ginnA"   ,x:3,y:9},
+            {name:"金" , role:"kinn"   , uni:"kinnA"   ,x:4,y:9},
+            {name:"王"  , role:"ou"                    ,x:5,y:9},
+            {name:"金" , role:"kinn"   , uni:"kinnB"   ,x:6,y:9},
+            {name:"銀" , role:"ginn"   , uni:"ginnB"   ,x:7,y:9},
+            {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:9},
+            {name:"香車",role:"kyousya", uni:"kyousyaB",x:9,y:9}
+            
+        ];
+
+        //functionで香車、桂馬、銀、金、王、角、飛車、歩の挙動を定める
+
+        function doKyousya (items){
+        }
+
+        function doKeima (){
+            
+        }
+
+        function doGin (){
+            
+        }
+
+        function doKin (){
+            
+        }
+
+        function doOu (){
+            
+        }
+
+        function doKaku (){
+            
+        }
+
+        function doHisya (){
+            
+        }
+        function doHu (){
+            
+        }
+
+
+
+
+        let firstId = null;
+
+        for (let y=1;y<=9;y++){
+            for(let x=1;x<=9;x++){
+                const card = document.createElement("button");
+                card.className = "bg-slate-200 rounded border focus:bg-blue-500 focus:text-white"
+                card.textContent = "";
+
+                card.id=`mass_${x}_${y}`;
+
+                ban.appendChild(card);
+            }
+        }
+
+        const Allgather = [...TeamA,...TeamB];
+
+        Allgather.forEach((pieces)=>{
+            const targeter =document.querySelector(`#mass_${pieces.x}_${pieces.y}`);
+            
+            if(targeter){
+                targeter.textContent = pieces.name;
+
+                if(TeamA.includes(pieces)){
+                    targeter.classList.add("rotate-180");
+                    targeter.dataset.team="A";
+                    targeter.dataset.team="B";
+                }
+            }
+        });
+
+        document.querySelectorAll("#ban button").forEach((card,index)=>{
+            card.addEventListener("click",(event)=>{
+                if (firstId === null){
+                    if (event.target.textContent === ""){
+                        return;
+                    }
+                    firstId = event.target.id;
+                    console.log("1" + firstId);
+
+                    //firstIdの駒の種類によって進める先を黒点で表示する
+                }else {
+                    const secondId = event.target.id;
+                    console.log("2" + secondId);
+
+                    const firstCard = document.querySelector("#"+firstId);
+                    const secondCard= document.querySelector("#"+secondId);
+
+                    if (firstCard === secondCard){
+                        firstCard.blur();
+                        secondCard.blur();
+                        firstId = null;
+                        return;
+                    }
+
+                    if (firstCard && secondCard){
+                        if (secondCard.textContent ===""){
+                            const nextCardfirst  =firstCard.nextSibling;
+                            const nextCardsecond =secondCard.nextSibling;
+                            ban.insertBefore (firstCard,nextCardsecond);
+                            ban.insertBefore (secondCard,nextCardfirst);
+                            firstCard.id = secondId;
+                            secondCard.id= firstId; 
+
+                            firstCard.blur();
+                            secondCard.blur();
+                        } else if (firstCard.dataset.team === secondCard.dataset.team){
+                            firstCard.blur();
+                            secondCard.blur();
+                            firstId = null;
+                            return;
+                        }else {
+                            const nextCardfirst  =firstCard.nextSibling;
+                            const nextCardsecond =secondCard.nextSibling;
+                            ban.insertBefore (firstCard,nextCardsecond);
+                            ban.insertBefore (secondCard,nextCardfirst);
+                            firstCard.id = secondId;
+                            secondCard.id= firstId; 
+
+                            firstCard.blur();
+                            secondCard.blur();
+                        }
+                    }
+                    firstId =null;
+                }
+            });
+            
+        });
+
+    </script>
+</body>
+</html>
