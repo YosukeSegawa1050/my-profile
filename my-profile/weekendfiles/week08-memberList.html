@@ -8,36 +8,48 @@
 </head>
 <body>
     <main>
-        <h1>メンバーリスト</h1>
-        <form id="filter"></form>
-        <form id="input1"></form>
-        <div id="input-2" class="flex">
-            <form>
+        <div class="w-full p-5 space-y-3">
+            <h1 class="text-3xl">メンバーリスト</h1>
+            <ul class="flex gap-10">
+                <ul id="filter" class="flex gap-10"></ul>
+                <button id="tuika" type="button" class="bg-blue-500 text-white rounded-xl px-3 py-1">追加</button>
+            </ul>
+            <form id="input1" class="hidden">
+                <label>ひらがな</label>
+                <input id="hiragana" type="text" placeholder="例：えんじにあ"
+                    class="border rounded mr-10 pl-1 py-1">
+                
+                
+                <label>カタカナ</label>
+                <input id="katakana" type="text" placeholder="例：エンジニア"
+                    class="border rounded mr-10 pl-1 py-1">
+                
+                
+                <label>English</label>
+                <input id="english" type="text" placeholder="例：engineer"
+                    class="border rounded mr-10 pl-1 py-1">
+                <button id="enter1" type="button" class="bg-blue-500 text-white rounded-xl px-3 py-1">追加</button>
+            </form>
+
+            <form id="input-2" class="flex items-center gap-1">
                 <label>名前</label>
                 <input id="name" type="text" placeholder="例：山田 太郎"
-                    class="border rounded">
-            </form>
-            <form>
+                    class="border rounded mr-10 pl-1 py-1">
+                
+                
                 <label>職業</label>
                 <input id="role" type="text" placeholder="例：公務員"
-                    class="border rounded">
-            </form>
-            <form>
+                    class="border rounded mr-10 pl-1 py-1">
+                
+                
                 <label>コメント</label>
                 <input id="comment" type="text" placeholder="例：お客様に一人一人丁寧に対応することを信条としています"
-                    class="border rounded">
+                    class="border rounded mr-10 pl-1 py-1">
+                
+                <button id="enter2" type="button" class="bg-blue-500 text-white rounded-xl px-3 py-1">追加</button>
             </form>
-            <button id="enter2" type="button" class="bg-blue-500 text-white rounded-xl">追加</button>
-        </div>
-
-        //リスト
-        <div>
-            <div class="flex justify-between">
-                <span>名前</span>
-                <span>職業</span>
-                <span>コメント</span>
-            </div>
-            <div id="li"></div>
+            <h2 id="warn" class="text-xl text-red-500"></h2>
+            <ul id="li" class="flex flex-col gap-3 py-3"></ul>
         </div>
     </main>
     
@@ -45,27 +57,127 @@
         //filter
         const filter = document.querySelector("#filter");
         const input1 = document.querySelector("#input1");
+        const tuika = document.querySelector("#tuika");
+        const enter1 = document.querySelector("#enter1");
+        const lists = [
+            {hira:"えんじにあ",kata:"エンジニア",eng:"engineer"},
+            {hira:"でざいなー",kata:"デザイナー",eng:"designer"}
+        ];
+
+        const all = document.createElement("button");
+        all.className="bg-yellow-600 text-white px-3 py-1 rounded shadow hover:bg-yellow-700";
+        all.textContent="全員";
+        filter.appendChild(all);
+        all.addEventListener("click",()=>{
+            li.textContent="";
+            createMembers(members);
+        });
+
+
+        function createLists (justify){
+            justify.forEach((items)=>{
+                const fil = document.createElement("button");
+                fil.className="bg-yellow-600 text-white px-3 py-1 rounded shadow hover:bg-yellow-700";
+                fil.textContent=items.kata;
+                filter.appendChild(fil);
+                fil.addEventListener("click",()=>{
+                const newmember =members.filter((n)=>{
+                    return n.role===items.hira||n.role===items.kata||n.role===items.eng;
+                });
+                    li.textContent="";
+                    createMembers(newmember);
+                });
+
+            });
+        }
+        createLists(lists);
+
+        tuika.addEventListener("click",()=>{
+            input1.classList.toggle("hidden");
+            warn.textContent="";
+        });
+
+        enter1.addEventListener("click",()=>{
+            const hira = document.querySelector("#hiragana").value;
+            const kata = document.querySelector("#katakana").value;
+            const eng = document.querySelector("#english").value;
+            if (hira===""||kata===""||eng===""){
+                return warn.textContent = "ひらがな・カタカナ・Englishを全て入力してください";
+            }
+            warn.textContent="";
+            const newfil = document.createElement("button");
+            newfil.className="bg-yellow-600 px-3 py-1 rounded shadow hover:bg-yellow-700";
+            newfil.textContent=kata;
+            filter.appendChild(newfil);
+            document.querySelector("#hiragana").value = "";
+            document.querySelector("#katakana").value = "";
+            document.querySelector("#english").value = "";
+
+            newfil.addEventListener("click",()=>{
+
+                <!--ここにフィルター-->
+            const newmembers = members.filter((n)=>{
+                return n.role===hira||n.role===kata||n.role===eng;
+            });
+            li.textContent="";
+            createMembers(newmembers);
+            });
+        });
 
         //member
         const enter2 = document.querySelector("#enter2");
+        const warn = document.querySelector("#warn");
         const li = document.querySelector("#li");
         const members = [
-            {name:ラインハルト・ヴァン・アストレア,role:聖剣,comment:不死鳥の加護と続・不死鳥の加護を持ってます},
-            {name:野比のび太,role:学生,comment:ゴルゴや次元よりも早く銃が撃てます},
-            {name:五条悟,role:死体,comment:死んだけど最強ですw},
-            {name:孫悟空,role:畑農家,comment:かめはめ波が撃てます},
-            {name:サトシ,role:ポケモンマスター,comment:たいていのことでは死にません}
+            {name:"ラインハルト・ヴァン・アストレア",role:"聖剣",comment:"不死鳥の加護と続・不死鳥の加護を持ってます"},
+            {name:"野比のび太",role:"学生",comment:"ゴルゴや次元よりも早く銃が撃てます"},
+            {name:"五条悟",role:"死体",comment:"死んだけど最強ですw"},
+            {name:"孫悟空",role:"畑農家",comment:"かめはめ波が撃てます"},
+            {name:"サトシ",role:"ポケモンマスター",comment:"たいていのことでは死にません"}
         ];
 
         //membersカードの表示
-        members.forEach((members)=>{
-            
-        });
+        function createMembers (justify){
+            li.textContent="";
+            justify.forEach((items)=>{
+                const card = document.createElement("div");
+                card.className="bg-slate-100 border rounded shadow space-y-1 p-1";
+                card.innerHTML=`
+                    <h2 class="text-xl">${items.name}</h2>
+                    <p class="text-blue-500 text-sm">${items.role}</p>
+                    <p>${items.comment}</p>
+                `;
+                li.appendChild(card);
+            });
+        }
+        createMembers(members);
 
         enter2.addEventListener("click",()=>{
+            const name = document.querySelector("#name").value;
+            const role = document.querySelector("#role").value;
+            const comment = document.querySelector("#comment").value;
+            if(name===""||role===""||comment===""){
+                return warn.textContent="名前・職業・コメントを入力してください";
+            }
+            warn.textContent="";
+            const newcard = document.createElement("div");
+            newcard.className="bg-slate-100 border rounded shadow space-y-1 p-1";
+            newcard.innerHTML=`
+                <h2 class="text-xl">${name}</h2>
+                <p class="text-blue-500 text-sm">${role}</p>
+                <p>${comment}</p>
+            `;
+            li.appendChild(newcard);
+            members.push({name:name,role:role,commet:comment});
 
+            newcard.scrollIntoView({
+                behavior:'smooth',
+                block:'end'
+            });
+            document.querySelector("#name").value = "";
+            document.querySelector("#role").value = "";
+            document.querySelector("#comment").value = "";
         });
-
     </script>
 </body>
 </html>
