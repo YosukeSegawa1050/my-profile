@@ -25,7 +25,7 @@
                     class="border rounded mr-10 pl-1 py-1">
                 
                 
-                <label>English</label>
+                <label>English/漢字</label>
                 <input id="english" type="text" placeholder="例：engineer"
                     class="border rounded mr-10 pl-1 py-1">
                 <button id="enter1" type="button" class="bg-blue-500 text-white rounded-xl px-3 py-1">追加</button>
@@ -43,8 +43,8 @@
                 
                 
                 <label>コメント</label>
-                <input id="comment" type="text" placeholder="例：お客様に一人一人丁寧に対応することを信条としています"
-                    class="border rounded mr-10 pl-1 py-1">
+                <textarea id="comment" type="text" placeholder="例：お客様に一人一人丁寧に対応することを信条としています"
+                    class="w-80 border rounded mr-10 pl-1 py-1"></textarea>
                 
                 <button id="enter2" type="button" class="bg-blue-500 text-white rounded-xl px-3 py-1">追加</button>
             </form>
@@ -106,7 +106,7 @@
             }
             warn.textContent="";
             const newfil = document.createElement("button");
-            newfil.className="bg-yellow-600 px-3 py-1 rounded shadow hover:bg-yellow-700";
+            newfil.className="bg-yellow-600 text-white px-3 py-1 rounded shadow hover:bg-yellow-700";
             newfil.textContent=kata;
             filter.appendChild(newfil);
             document.querySelector("#hiragana").value = "";
@@ -133,7 +133,9 @@
             {name:"野比のび太",role:"学生",comment:"ゴルゴや次元よりも早く銃が撃てます"},
             {name:"五条悟",role:"死体",comment:"死んだけど最強ですw"},
             {name:"孫悟空",role:"畑農家",comment:"かめはめ波が撃てます"},
-            {name:"サトシ",role:"ポケモンマスター",comment:"たいていのことでは死にません"}
+            {name:"サトシ",role:"ポケモンマスター",comment:"たいていのことでは死にません"},
+            {name:"瀬川 洋輔",role:"エンジニア",comment:"こんにちは"},
+            {name:"三宅 一世",role:"デザイナー",comment:"世界の三宅です"}
         ];
 
         //membersカードの表示

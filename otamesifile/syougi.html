@@ -12,6 +12,7 @@
         <main>
             <div id="ban" class="w-1/2 mx-auto bg-amber-500 grid grid-cols-9 grid-rows-9 gap-[1px] p-[1px] aspect-square shadow-lg translate-y-5"></div>
             <span id="result" class="text-4xl bg-slate-200 translate-x-1/2 translate-y-1/2"></span>
+            <span id="warn"></span>
         </main>
         <div id="motigomaB" class="w-1/4 bg-amber-500 grid grid-cols-4 grid-rows-4 aspect-square shadow-lg fixed bottom-0 right-0 p-[1px] gap-[1px]"></div>
     </div>
@@ -22,6 +23,7 @@
         const motigomaA = document.querySelector("#motigomaA");
         const motigomaB = document.querySelector("#motigomaB");
         const result = document.querySelector("#result");
+        const warn = document.querySelector("#warn");
 
         const TeamA = [
             {name:"香車",role:"kyousya", uni:"kyousyaA",x:1,y:1},
@@ -75,73 +77,117 @@
             
         ];
 
-        function a (firstCard,secondId){
+        function a (firstId,secondId){
             const [,firstX,firstY] = firstId.split("_").map(Number);
             const [,secondX,secondY] = secondId.split("_").map(Number);
             return{firstX,secondX,firstY,secondY};
         }
 
-        function doKyousya (items){
+        //functionで香車、桂馬、銀、金、王、角、飛車、歩の挙動を定める
+
+        function doKyousya (){
             a(firstId.secondId);
             for(let currentY = firstY - 1;currentY >secondY;currentY--){
                 const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
                 if (checkCard&&checkCard.textContent !==""){
-                    return false;
+                    warn.textContent="";
+                    return true;
                 }
             }
-            return true;
+            warn.textContent="そこには進めないよ!";
+            return false;
         }
-        //functionで香車、桂馬、銀、金、王、角、飛車、歩の挙動を定める
         
 
         function doKeima (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            if((firstX-1===secondX||firstX+1===secondX) && firstY-2===secondY){
+                return true;
             }
-            
+            return false;
         }
+        doKeima();
 
         function doGin (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
-            }
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            const dx = Math.abs(secondX-firstX);
+            const dy = secondY-firstY;
         }
 
         function doKin (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            if((firstX-1)===secondX || firstY===secondY){
+                return true;
+            }else if ((firstX-1) === secondX || (firstY-1)===secondY){
+                return true;
+            }else if (firstX===secondX || (firstY-1)===(secondY)){
+                return true;
+            }else if ((firstX+1)===secondX || (firstY-1)===secondY){
+                return true;
+            }else if ((firstX+1)===secondX || firstY===secondY){
+                return true;
+            }else if (firstX===secondX || (firstY-1)===secondY){
+                return true;
             }
+            return false;
         }
 
         function doOu (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
             if(firstX !== secondX || firstY<=secondY){
                 return false;
             }
         }
 
         function doKaku (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
-            }
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            for (let currentX =firstX-1 ; currentX)
+            warn.textContent="そこには進めないよ!";
+            return false;
+            
         }
 
         function doHisya (){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            for(let currentY = firstY - 1;currentY >secondY;currentY--){
+                const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
+                if (checkCard&&checkCard.textContent !==""){
+                    warn.textContent="";
+                    return true;
+                }
             }
+            for(let currentY = firstY + 1;currentY <secondY;currentY--){
+                const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
+                if (checkCard&&checkCard.textContent !==""){
+                    warn.textContent="";
+                    return true;
+                }
+            }
+            for(let currentX = firstX - 1;currentX >secondX;currentX--){
+                const checkCard = document.getElementById(`mass_${currentX}_${firstY}`);
+                if (checkCard&&checkCard.textContent !==""){
+                    warn.textContent="";
+                    return true;
+                }
+            }
+            for(let currentX = firstX + 1;currentX <secondX;currentX--){
+                const checkCard = document.getElementById(`mass_${currentX}_${firstY}`);
+                if (checkCard&&checkCard.textContent !==""){
+                    warn.textContent="";
+                    return true;
+                }
+            }
+            warn.textContent="そこには進めないよ!";
+            return false;
+            
         }
 
         function doHu (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            if(firstX === secondX || (firstY-1)===secondY){
+                return true;
             }
+            return false;
         }
 
 
@@ -327,6 +373,8 @@
                     //持ち駒を盤面に配置する場合
                     if(firstCard.id.startsWith("moti_")){
                         if(secondCard.id.startsWith("mass_")&&secondCard.textContent===""){
+                            //二歩の禁止
+                            
                             haiti(firstCard,secondCard);
                         }else{
                             firstCard.removeAttribute("id");
