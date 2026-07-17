@@ -39,28 +39,28 @@
             {name:"飛車", role:"hisya"                 ,x:2,y:2},
             {name:"角"  , role:"kaku"                  ,x:8,y:2},
 
-            {name:"歩" , role:"hu1" , uni:"hu1"        ,x:1,y:3},
-            {name:"歩" , role:"hu2" , uni:"hu2"        ,x:2,y:3},
-            {name:"歩" , role:"hu3" , uni:"hu3"        ,x:3,y:3},
-            {name:"歩" , role:"hu4" , uni:"hu4"        ,x:4,y:3},
-            {name:"歩" , role:"hu5" , uni:"hu5"        ,x:5,y:3},
-            {name:"歩" , role:"hu6" , uni:"hu6"        ,x:6,y:3},
-            {name:"歩" , role:"hu7" , uni:"hu7"        ,x:7,y:3},
-            {name:"歩" , role:"hu8" , uni:"hu8"        ,x:8,y:3},
-            {name:"歩" , role:"hu9" , uni:"hu9"        ,x:9,y:3},
+            {name:"歩" , role:"hu" , uni:"hu1"        ,x:1,y:3},
+            {name:"歩" , role:"hu" , uni:"hu2"        ,x:2,y:3},
+            {name:"歩" , role:"hu" , uni:"hu3"        ,x:3,y:3},
+            {name:"歩" , role:"hu" , uni:"hu4"        ,x:4,y:3},
+            {name:"歩" , role:"hu" , uni:"hu5"        ,x:5,y:3},
+            {name:"歩" , role:"hu" , uni:"hu6"        ,x:6,y:3},
+            {name:"歩" , role:"hu" , uni:"hu7"        ,x:7,y:3},
+            {name:"歩" , role:"hu" , uni:"hu8"        ,x:8,y:3},
+            {name:"歩" , role:"hu" , uni:"hu9"        ,x:9,y:3},
 
         ];
 
         const TeamB = [
-            {name:"歩" , role:"hu1" , uni:"hu1"        ,x:1,y:7},
-            {name:"歩" , role:"hu2" , uni:"hu2"        ,x:2,y:7},
-            {name:"歩" , role:"hu3" , uni:"hu3"        ,x:3,y:7},
-            {name:"歩" , role:"hu4" , uni:"hu4"        ,x:4,y:7},
-            {name:"歩" , role:"hu5" , uni:"hu5"        ,x:5,y:7},
-            {name:"歩" , role:"hu6" , uni:"hu6"        ,x:6,y:7},
-            {name:"歩" , role:"hu7" , uni:"hu7"        ,x:7,y:7},
-            {name:"歩" , role:"hu8" , uni:"hu8"        ,x:8,y:7},
-            {name:"歩" , role:"hu9" , uni:"hu9"        ,x:9,y:7},
+            {name:"歩" , role:"hu" , uni:"hu1"        ,x:1,y:7},
+            {name:"歩" , role:"hu" , uni:"hu2"        ,x:2,y:7},
+            {name:"歩" , role:"hu" , uni:"hu3"        ,x:3,y:7},
+            {name:"歩" , role:"hu" , uni:"hu4"        ,x:4,y:7},
+            {name:"歩" , role:"hu" , uni:"hu5"        ,x:5,y:7},
+            {name:"歩" , role:"hu" , uni:"hu6"        ,x:6,y:7},
+            {name:"歩" , role:"hu" , uni:"hu7"        ,x:7,y:7},
+            {name:"歩" , role:"hu" , uni:"hu8"        ,x:8,y:7},
+            {name:"歩" , role:"hu" , uni:"hu9"        ,x:9,y:7},
 
             {name:"角"  , role:"kaku"                  ,x:2,y:8},
             {name:"飛車", role:"hisya"                 ,x:8,y:8},
@@ -69,7 +69,7 @@
             {name:"桂馬",role:"keima"  , uni:"keimaA"  ,x:2,y:9},
             {name:"銀" , role:"ginn"   , uni:"ginnA"   ,x:3,y:9},
             {name:"金" , role:"kinn"   , uni:"kinnA"   ,x:4,y:9},
-            {name:"玉"  , role:"gyoku"                    ,x:5,y:9},
+            {name:"玉"  , role:"gyoku"                 ,x:5,y:9},
             {name:"金" , role:"kinn"   , uni:"kinnB"   ,x:6,y:9},
             {name:"銀" , role:"ginn"   , uni:"ginnB"   ,x:7,y:9},
             {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:9},
@@ -85,106 +85,122 @@
 
         //functionで香車、桂馬、銀、金、王、角、飛車、歩の挙動を定める
 
-        function doKyousya (){
-            a(firstId.secondId);
-            for(let currentY = firstY - 1;currentY >secondY;currentY--){
-                const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
-                if (checkCard&&checkCard.textContent !==""){
-                    warn.textContent="";
-                    return true;
+        function doKyousya (firstId,secondId){
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            if (dy===0&&dy!==0) {
+                const stepY = secondY>firstY ? 1:-1;
+                let currentY = firstY + stepY;
+
+                while (currentY !== secondY){
+                    const check = document.getElementById(`mass_${currentX}_${currentY}`);
+                    if (check&&check.textContent!==""){
+                        return false;
+                    }
+                    currentY -= stepY;
                 }
+                return true;
             }
             warn.textContent="そこには進めないよ!";
             return false;
         }
         
 
-        function doKeima (){
+        function doKeima (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
             if((firstX-1===secondX||firstX+1===secondX) && firstY-2===secondY){
                 return true;
             }
+            warn.textContent="そこには進めないよ!";
             return false;
         }
-        doKeima();
 
-        function doGin (){
+        function doGin (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
             const dx = Math.abs(secondX-firstX);
             const dy = secondY-firstY;
-        }
-
-        function doKin (){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if((firstX-1)===secondX || firstY===secondY){
+            if ((dx===1 || dx===0)&&dy===-1){
                 return true;
-            }else if ((firstX-1) === secondX || (firstY-1)===secondY){
-                return true;
-            }else if (firstX===secondX || (firstY-1)===(secondY)){
-                return true;
-            }else if ((firstX+1)===secondX || (firstY-1)===secondY){
-                return true;
-            }else if ((firstX+1)===secondX || firstY===secondY){
-                return true;
-            }else if (firstX===secondX || (firstY-1)===secondY){
+            }else if (dx===1&&dy===1){
                 return true;
             }
             return false;
         }
 
-        function doOu (){
+        function doKin (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if(firstX !== secondX || firstY<=secondY){
-                return false;
+            const dx = Math.abs(secondX-firstX);
+            const dy = secondY-firstY;
+            if ((dx===1 || dx===0)&&dy===-1){
+                return true;
+            }else if (dx===1&&dy===0){
+                return true;
+            }else if (dx===0&&dy===1){
+                return true;
             }
+            return false;
         }
 
-        function doKaku (){
+        function doOu (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            for (let currentX =firstX-1 ; currentX)
-            warn.textContent="そこには進めないよ!";
+            const dx = Math.abs(secondX-firstX);
+            const dy = Math.abs(secondY-firstY);
+            if (dx<=1&&dy<=1&&!(dx===0&&dy===0)){
+                return true;
+            }
             return false;
-            
         }
 
-        function doHisya (){
+        function doKaku (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            for(let currentY = firstY - 1;currentY >secondY;currentY--){
-                const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
-                if (checkCard&&checkCard.textContent !==""){
-                    warn.textContent="";
-                    return true;
+            const dx = Math.abs(secondX-firstX);
+            const dy = Math.abs(secondY-firstY);
+            if (dx===dy){
+                const stepX = secondX>firstX ? 1:-1;
+                const stepY = secondY>firstY ? 1:-1;
+
+                let currentX = firstX + stepX;
+                let currentY = firstY + stepY;
+
+                while (currentX !== secondX && currentY !== secondY){
+                    const check = document.getElementById(`mass_${currentX}_${currentY}`);
+                    if (check&&check.textContent!==""){
+                        return false;
+                    }
+                    currentX += stepX;
+                    currentY += stepY;
                 }
+                return true;
             }
-            for(let currentY = firstY + 1;currentY <secondY;currentY--){
-                const checkCard = document.getElementById(`mass_${firstX}_${currentY}`);
-                if (checkCard&&checkCard.textContent !==""){
-                    warn.textContent="";
-                    return true;
-                }
-            }
-            for(let currentX = firstX - 1;currentX >secondX;currentX--){
-                const checkCard = document.getElementById(`mass_${currentX}_${firstY}`);
-                if (checkCard&&checkCard.textContent !==""){
-                    warn.textContent="";
-                    return true;
-                }
-            }
-            for(let currentX = firstX + 1;currentX <secondX;currentX--){
-                const checkCard = document.getElementById(`mass_${currentX}_${firstY}`);
-                if (checkCard&&checkCard.textContent !==""){
-                    warn.textContent="";
-                    return true;
-                }
-            }
-            warn.textContent="そこには進めないよ!";
             return false;
-            
+        }
+
+        function doHisya (firstId,secondId){
+            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
+            const dx = Math.abs(secondX-firstX);
+            const dy = Math.abs(secondY-firstY);
+            if ((dx===0 && dy!==0) || (dx!==0 && dy===0)) {
+                const stepX = secondX>firstX ? 1:-1;
+                const stepY = secondY>firstY ? 1:-1;
+
+                let currentX = firstX + stepX;
+                let currentY = firstY + stepY;
+
+                while (currentX !== secondX || currentY !== secondY){
+                    const check = document.getElementById(`mass_${currentX}_${currentY}`);
+                    if (check&&check.textContent!==""){
+                        return false;
+                    }
+                    currentX += stepX;
+                    currentY += stepY;
+                }
+                return true;
+            }
+            return false;
         }
 
         function doHu (firstId,secondId){
             const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if(firstX === secondX || (firstY-1)===secondY){
+            if(firstX === secondX&&(firstY-1)===secondY){
                 return true;
             }
             return false;
@@ -193,42 +209,24 @@
 
         //クリックしたのがどのコマなのか判別する処理をひとまとまりにする
         function syurui (firstId,secondId,firstCard,secondCard){
-            if(firstCard.textContent === "香車"){
-
-            }else if (firstCard.textContent === "桂馬"){
-
-            }else if (firstCard.textContent === "銀"){
-
-            }else if (firstCard.textContent === "金"){
-
-            }else if (firstCard.textContent === "王"){
-
-            }else if (firstCard.textContent === "飛車"){
-
-            }else if (firstCard.textContent === "角"){
-
-            }else if (firstCard.textContent === "歩"){
-
+            if(firstCard.role === "kyousya"){
+                return doKyousya(firstId,secondId);
+            }else if (firstCard.role === "keima"){
+                return doKeima(firstId,secondId);
+            }else if (firstCard.role === "ginn"){
+                return doGin(firstId,secondId);
+            }else if (firstCard.role === "kinn"){
+                return doKin(firstId,secondId);
+            }else if (firstCard.role === "ou" || firstCard.role ==="gyoku"){
+                return doOu(firstId,secondId);
+            }else if (firstCard.role === "hisya"){
+                return doHisya(firstId,secondId);
+            }else if (firstCard.role === "kaku"){
+                return doKaku(firstId,secondId);
+            }else if (firstCard.role === "hu"){
+                return doHu(firstId,secondId);
             }
-        }
-
-        //成の挙動
-        if (firstCard.dataset.team==="B"&&secondY<=3){
-            if(firstCard.textContent==="歩"){
-                //と金に変化
-            }else if (firstCard.textContent==="飛車"){
-
-            }else if (firstCard.textContent==="角"){
-
-            }else if (firstCard.textContent==="香車"){
-
-            }else if (firstCard.textContent==="桂馬"){
-
-            }else if (firstCard.textContent==="銀"){
-
-            }else{
-                return;
-            }
+            return false;
         }
 
         //駒を進めるときの挙動
@@ -385,6 +383,13 @@
                         return;
                     }
 
+                    if (!syurui(firstId,secondId,firstCard,secondCard)){
+                        firstCard.blur();
+                        secondCard.blur();
+                        firstId = null;
+                        return;
+                    }
+
                     //駒を空白に移動させる場合
                     if (secondCard.textContent ===""){
                         koukan (firstCard,secondCard);
@@ -421,6 +426,15 @@
                 handleCardClick(event.currentTarget);
             });
         });
+
+        //二歩の処理
+        //dataset.teamのAとBを交互にする判定（一手目無効になった場合の処理）
+        //移動先の候補をbg-redとbg-blueで表示
+        //待った機能
+        //始めるボタン
+        //お助けボタン
+        //tailwindをより駒っぽくする
+        
 
 
     </script>

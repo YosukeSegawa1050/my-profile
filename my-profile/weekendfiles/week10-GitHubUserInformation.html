@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>awef</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="p-5 bg-slate-100">
+    <h1 class="p-3 text-3xl bg-white rounded-xl flex justify-center">GitHubユーザー情報表示ツール</h1>
+    <div id="li" class="p-5 grid grid-cols-2 md:grid-cols-3"></div>
+    <script>
+        async function userli () {
+            const li = document.querySelector("#li");
+
+            try{
+                const user = await fetch("https://api.github.com/users/YosukeSegawa1050")
+
+                if (!user.ok){
+                    throw new Error ("ユーザーが見つかりませんでした");
+                }
+
+                const person = await user.json();
+
+                console.log(person);
+
+                li.textContent = "";
+
+                const card = document.createElement("div");
+                card.className="bg-white rounded-xl shadow p-3";
+
+                const img = document.createElement("img");
+                img.src = person.avatar_url;
+                img.alt = person.name;
+                img.className="w-8";
+
+                const name = document.createElement("h2");
+                name.textContent ="name:"+ (person.name || person.login);
+                name.className="";
+
+                const bio = document.createElement("p");
+                bio.textContent ="bio:"+ (person.bio || "自己紹介は記入されていません");
+                bio.className="";
+
+                const followers = document.createElement("p");
+                followers.textContent ="followers:"+ person.followers;
+                followers.className="";
+
+                card.appendChild(img);
+                card.appendChild(name);
+                card.appendChild(bio);
+                card.appendChild(followers);
+                li.appendChild(card);
+                
+
+            }catch(error){
+                li.textContent = "データの取得に失敗しました";
+                console.log(error);
+            }
+        }
+
+        userli();
+    </script>
+</body>
+</html>
