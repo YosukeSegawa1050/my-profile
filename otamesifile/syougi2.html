@@ -1,24 +1,41 @@
 <!DOCTYPE html>
+
 <html lang="ja" class="overscroll-none">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>将棋対戦ゲーム</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
+
 <body class="h-screen">
+
     <div id="ban2">
+
         <div id="motigomaA" class="w-1/4 bg-amber-500 grid grid-cols-4 grid-rows-4 aspect-square shadow-lg fixed top-0 left-0 p-[1px] gap-[1px]"></div>
+
         <main>
-            <div id="ban" class="w-1/2 mx-auto bg-amber-500 grid grid-cols-9 grid-rows-9 gap-[1px] p-[1px] aspect-square shadow-lg translate-y-5"></div>
+
+            <div id="ban" class="w-1/2 mx-auto bg-stone-500 grid grid-cols-9 grid-rows-9 gap-[1px] p-[1px] aspect-square shadow-lg border border-[4px] translate-y-5"></div>
+
             <span id="result" class="text-4xl bg-slate-200 translate-x-1/2 translate-y-1/2"></span>
+
             <span id="warn"></span>
+
         </main>
+
         <div id="motigomaB" class="w-1/4 bg-amber-500 grid grid-cols-4 grid-rows-4 aspect-square shadow-lg fixed bottom-0 right-0 p-[1px] gap-[1px]"></div>
+
     </div>
-    
-    <script>
-        const ban = document.querySelector("#ban");
+
+
+    <script>const ban = document.querySelector("#ban");
         const ban2 = document.querySelector("#ban2");
         const motigomaA = document.querySelector("#motigomaA");
         const motigomaB = document.querySelector("#motigomaB");
@@ -35,10 +52,8 @@
             {name:"銀" , role:"ginn"   , uni:"ginnB"   ,x:7,y:1},
             {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:1},
             {name:"香車",role:"kyousya", uni:"kyousyaB",x:9,y:1},
-
             {name:"飛車", role:"hisya"                 ,x:2,y:2},
             {name:"角"  , role:"kaku"                  ,x:8,y:2},
-
             {name:"歩" , role:"hu" , uni:"hu1"        ,x:1,y:3},
             {name:"歩" , role:"hu" , uni:"hu2"        ,x:2,y:3},
             {name:"歩" , role:"hu" , uni:"hu3"        ,x:3,y:3},
@@ -48,7 +63,6 @@
             {name:"歩" , role:"hu" , uni:"hu7"        ,x:7,y:3},
             {name:"歩" , role:"hu" , uni:"hu8"        ,x:8,y:3},
             {name:"歩" , role:"hu" , uni:"hu9"        ,x:9,y:3},
-
         ];
 
         const TeamB = [
@@ -61,20 +75,17 @@
             {name:"歩" , role:"hu" , uni:"hu7"        ,x:7,y:7},
             {name:"歩" , role:"hu" , uni:"hu8"        ,x:8,y:7},
             {name:"歩" , role:"hu" , uni:"hu9"        ,x:9,y:7},
-
             {name:"角"  , role:"kaku"                  ,x:2,y:8},
+            {name:"金" , role:"kinn"   , uni:"kinnA"   ,x:4,y:9},
             {name:"飛車", role:"hisya"                 ,x:8,y:8},
-
+            {name:"金" , role:"kinn"   , uni:"kinnB"   ,x:6,y:9},
             {name:"香車",role:"kyousya", uni:"kyousyaA",x:1,y:9},
+            {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:9},
             {name:"桂馬",role:"keima"  , uni:"keimaA"  ,x:2,y:9},
             {name:"銀" , role:"ginn"   , uni:"ginnA"   ,x:3,y:9},
-            {name:"金" , role:"kinn"   , uni:"kinnA"   ,x:4,y:9},
             {name:"玉"  , role:"gyoku"                 ,x:5,y:9},
-            {name:"金" , role:"kinn"   , uni:"kinnB"   ,x:6,y:9},
             {name:"銀" , role:"ginn"   , uni:"ginnB"   ,x:7,y:9},
-            {name:"桂馬",role:"keima"  , uni:"keimaB"  ,x:8,y:9},
             {name:"香車",role:"kyousya", uni:"kyousyaB",x:9,y:9}
-            
         ];
 
         function a (firstId,secondId){
@@ -83,87 +94,89 @@
             return{firstX,secondX,firstY,secondY};
         }
 
-        //functionで香車、桂馬、銀、金、王、角、飛車、歩の挙動を定める
+        // --- 各駒の挙動定義 ---
 
-        function doKyousya (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if (dy===0&&dy!==0) {
-                const stepY = secondY>firstY ? 1:-1;
-                let currentY = firstY + stepY;
+        function doKyousya (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const team = firstCard.dataset.team;
+            
+            // 縦移動のみ（X座標が変わらない）かつ、チームに応じた前進であること
+            if (firstX !== secondX) return false;
+            if (team === "A" && secondY <= firstY) return false; // Aは下方向(+)のみ
+            if (team === "B" && secondY >= firstY) return false; // Bは上方向(-)のみ
 
-                while (currentY !== secondY){
-                    const check = document.getElementById(`mass_${currentX}_${currentY}`);
-                    if (check&&check.textContent!==""){
-                        return false;
-                    }
-                    currentY -= stepY;
-                }
-                return true;
+            const stepY = team === "A" ? 1 : -1;
+            let currentY = firstY + stepY;
+            while (currentY !== secondY) {
+                const check = document.getElementById(`mass_${firstX}_${currentY}`);
+                if (check && check.textContent !== "") return false;
+                currentY += stepY;
             }
-            warn.textContent="そこには進めないよ!";
-            return false;
+            return true;
         }
         
+        function doKeima (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const team = firstCard.dataset.team;
+            const dx = Math.abs(secondX - firstX);
+            const dy = secondY - firstY;
 
-        function doKeima (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if((firstX-1===secondX||firstX+1===secondX) && firstY-2===secondY){
-                return true;
-            }
-            warn.textContent="そこには進めないよ!";
+            // チームによって前進するY方向の正負が変わる
+            if (team === "A" && dx === 1 && dy === 2) return true;
+            if (team === "B" && dx === 1 && dy === -2) return true;
             return false;
         }
 
-        function doGin (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            const dx = Math.abs(secondX-firstX);
-            const dy = secondY-firstY;
-            if ((dx===1 || dx===0)&&dy===-1){
-                return true;
-            }else if (dx===1&&dy===1){
-                return true;
-            }
+        function doGin (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const team = firstCard.dataset.team;
+            const dx = Math.abs(secondX - firstX);
+            const dy = secondY - firstY;
+
+            // 前の段への移動方向をチーム別に調整
+            const forward = team === "A" ? 1 : -1;
+            if (dy === forward && (dx === 1 || dx === 0)) return true; // 前3マス
+            if (dy === -forward && dx === 1) return true; // 斜め後ろ2マス
             return false;
         }
 
-        function doKin (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            const dx = Math.abs(secondX-firstX);
-            const dy = secondY-firstY;
-            if ((dx===1 || dx===0)&&dy===-1){
-                return true;
-            }else if (dx===1&&dy===0){
-                return true;
-            }else if (dx===0&&dy===1){
-                return true;
-            }
+        function doKin (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const team = firstCard.dataset.team;
+            const dx = Math.abs(secondX - firstX);
+            const dy = secondY - firstY;
+
+            const forward = team === "A" ? 1 : -1;
+            if (dy === forward && (dx === 1 || dx === 0)) return true; // 前3マス
+            if (dy === 0 && dx === 1) return true; // 真横2マス
+            if (dy === -forward && dx === 0) return true; // 真後ろ1マス
             return false;
         }
 
         function doOu (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            const dx = Math.abs(secondX-firstX);
-            const dy = Math.abs(secondY-firstY);
-            if (dx<=1&&dy<=1&&!(dx===0&&dy===0)){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const dx = Math.abs(secondX - firstX);
+            const dy = Math.abs(secondY - firstY);
+            if (dx <= 1 && dy <= 1 && !(dx === 0 && dy === 0)){
                 return true;
             }
             return false;
         }
 
         function doKaku (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            const dx = Math.abs(secondX-firstX);
-            const dy = Math.abs(secondY-firstY);
-            if (dx===dy){
-                const stepX = secondX>firstX ? 1:-1;
-                const stepY = secondY>firstY ? 1:-1;
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const dx = Math.abs(secondX - firstX);
+            const dy = Math.abs(secondY - firstY);
+            if (dx === dy){
+                const stepX = secondX > firstX ? 1 : -1;
+                const stepY = secondY > firstY ? 1 : -1;
 
                 let currentX = firstX + stepX;
                 let currentY = firstY + stepY;
 
-                while (currentX !== secondX && currentY !== secondY){
+                while (currentX !== secondX || currentY !== secondY){
                     const check = document.getElementById(`mass_${currentX}_${currentY}`);
-                    if (check&&check.textContent!==""){
+                    if (check && check.textContent !== ""){
                         return false;
                     }
                     currentX += stepX;
@@ -175,19 +188,19 @@
         }
 
         function doHisya (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            const dx = Math.abs(secondX-firstX);
-            const dy = Math.abs(secondY-firstY);
-            if ((dx===0 && dy!==0) || (dx!==0 && dy===0)) {
-                const stepX = secondX>firstX ? 1:-1;
-                const stepY = secondY>firstY ? 1:-1;
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const dx = Math.abs(secondX - firstX);
+            const dy = Math.abs(secondY - firstY);
+            if ((dx === 0 && dy !== 0) || (dx !== 0 && dy === 0)) {
+                const stepX = dx === 0 ? 0 : (secondX > firstX ? 1 : -1);
+                const stepY = dy === 0 ? 0 : (secondY > firstY ? 1 : -1);
 
                 let currentX = firstX + stepX;
                 let currentY = firstY + stepY;
 
                 while (currentX !== secondX || currentY !== secondY){
                     const check = document.getElementById(`mass_${currentX}_${currentY}`);
-                    if (check&&check.textContent!==""){
+                    if (check && check.textContent !== ""){
                         return false;
                     }
                     currentX += stepX;
@@ -198,25 +211,25 @@
             return false;
         }
 
-        function doHu (firstId,secondId){
-            const {firstX,secondX,firstY,secondY}=a(firstId,secondId);
-            if(firstX === secondX&&(firstY-1)===secondY){
-                return true;
-            }
+        function doHu (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            const team = firstCard.dataset.team;
+            if (team === "A" && firstX === secondX && (firstY + 1) === secondY) return true;
+            if (team === "B" && firstX === secondX && (firstY - 1) === secondY) return true;
             return false;
         }
 
-
-        //クリックしたのがどのコマなのか判別する処理をひとまとまりにする
+        // コマの種類別分岐処理
         function syurui (firstId,secondId,firstCard,secondCard){
+            warn.textContent = ""; // 警告を初期化
             if(firstCard.role === "kyousya"){
-                return doKyousya(firstId,secondId);
+                return doKyousya(firstId,secondId,firstCard);
             }else if (firstCard.role === "keima"){
-                return doKeima(firstId,secondId);
+                return doKeima(firstId,secondId,firstCard);
             }else if (firstCard.role === "ginn"){
-                return doGin(firstId,secondId);
+                return doGin(firstId,secondId,firstCard);
             }else if (firstCard.role === "kinn"){
-                return doKin(firstId,secondId);
+                return doKin(firstId,secondId,firstCard);
             }else if (firstCard.role === "ou" || firstCard.role ==="gyoku"){
                 return doOu(firstId,secondId);
             }else if (firstCard.role === "hisya"){
@@ -224,15 +237,61 @@
             }else if (firstCard.role === "kaku"){
                 return doKaku(firstId,secondId);
             }else if (firstCard.role === "hu"){
-                return doHu(firstId,secondId);
+                return doHu(firstId,secondId,firstCard);
             }
             return false;
         }
 
-        //駒を進めるときの挙動
+        function syuruinari (secondCard){
+            if(secondCard.role === "kyousya"){
+                secondCard.textContent = "成香";
+                secondCard.role = "kinn";
+            }else if (secondCard.role === "keima"){
+                secondCard.textContent = "成桂";
+                secondCard.role = "kinn";
+            }else if (secondCard.role === "ginn"){
+                secondCard.textContent = "成銀";
+                secondCard.role = "kinn";
+            }else if (secondCard.role === "hisya"){
+                secondCard.textContent = "竜王";
+            }else if (secondCard.role === "kaku"){
+                secondCard.textContent = "竜馬";
+            }else if (secondCard.role === "hu"){
+            secondCard.textContent = "と金";
+            secondCard.role = "kinn";
+            }
+        }
+
+        //二歩の制限
+        function nihu (firstId,secondId,firstCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            for (let Y = 1; Y <= 9; Y++){
+                const checkId = `mass_${secondX}_${Y}`;
+                const checkCard = document.getElementById(checkId);
+
+                if(checkCard.dataset.team === firstCard.dataset.team && checkCard.role ==="hu"){
+                    return false;
+                }
+            }
+        return true;
+        }
+
+        //成の挙動制御
+        function nari (firstId,secondId,secondCard){
+            const {firstX,secondX,firstY,secondY} = a(firstId,secondId);
+            if(secondCard.dataset.team === "A" && secondY >=7){
+                syuruinari(secondCard);
+            }else if(secondCard.dataset.team === "B" && secondY <= 3) {
+                syuruinari (secondCard);
+            }
+        }
+
+        // 駒を進めるときの挙動
         function koukan (firstCard,secondCard){
             secondCard.textContent = firstCard.textContent;
             secondCard.dataset.team = firstCard.dataset.team;
+            // role属性を移動先に引き継ぐ
+            secondCard.role = firstCard.role; 
 
             if (firstCard.classList.contains("rotate-180")){
                 secondCard.classList.add("rotate-180");
@@ -243,18 +302,20 @@
 
             firstCard.textContent = "";
             firstCard.dataset.team = "";
+            firstCard.role = ""; 
 
             firstCard.blur();
             secondCard.blur();
         }
 
-
-        //相手の駒を取って持ち駒にするときの挙動
+        // 相手の駒を取って持ち駒にするときの挙動
         function motigomaAce (items,justify,firstCard,secondCard){
             const copyCard = document.createElement("button");
             copyCard.textContent = secondCard.textContent;
-            copyCard.className = "bg-slate-200 rounded border font-bold text-slate-800 flex justify-center items-center aspect-square focus:bg-blue-500 focus:text-white";
+            copyCard.className = "bg-amber-500 border font-serif flex justify-center items-center aspect-square focus:bg-blue-500 focus:text-white";
             copyCard.dataset.moti = "true";
+            // 元の駒のrole（種類）を持ち駒ボタンにも持たせる
+            copyCard.role = secondCard.role; 
 
             if (firstCard.dataset.team === "A"){
                 copyCard.dataset.team = "A";
@@ -274,11 +335,11 @@
             koukan (firstCard,secondCard);
         }
 
-
-        //自分の持ち駒を盤面に配置するときの挙動
+        // 自分の持ち駒を盤面に配置するときの挙動
         function haiti (firstCard,secondCard){
             secondCard.textContent = firstCard.textContent;
             secondCard.dataset.team = firstCard.dataset.team;
+            secondCard.role = firstCard.role; // roleを引き継ぐ
             firstCard.classList.add("hidden");
 
             if (firstCard.dataset.team === "A") {
@@ -291,33 +352,28 @@
             secondCard.blur();
         }
 
-
-
         let firstId = null;
         let isGameOver = false;
 
-
-        //盤面にまず空白のbottonを配置
+        // 盤面にまず空白のbuttonを配置
         for (let y=1;y<=9;y++){
             for(let x=1;x<=9;x++){
                 const card = document.createElement("button");
-                card.className = "bg-slate-200 rounded border focus:bg-blue-500 focus:text-white"
+                card.className = "bg-amber-200 font-serif border focus:bg-blue-500 focus:text-white"
                 card.textContent = "";
-
                 card.id=`mass_${x}_${y}`;
-
                 ban.appendChild(card);
             }
         }
 
-
-        //空白の駒に駒の名前を入れていく
+        // 空白の駒に駒の名前とroleを入れていく
         const Allgather = [...TeamA,...TeamB];
         Allgather.forEach((pieces)=>{
             const targeter =document.querySelector(`#mass_${pieces.x}_${pieces.y}`);
             
             if(targeter){
                 targeter.textContent = pieces.name;
+                targeter.role = pieces.role; // ボタン自体に初期roleを設定
 
                 if(TeamA.includes(pieces)){
                     targeter.classList.add("rotate-180");
@@ -328,34 +384,37 @@
             }
         });
 
+        let preventteam = "A";
 
-        //駒を実際に動かしたときの挙動
+        // 駒を実際に動かしたときの挙動
         function handleCardClick(currentCard){
-            if (isGameOver)return;
+            if (isGameOver) return;
             
-            //一手目
+            // 一手目
             if (firstId === null){
-                //空白を選択したとき
-                if (currentCard.textContent === ""&&!currentCard.dataset.moti){
+                if (currentCard.textContent === "" && !currentCard.dataset.moti){
                     currentCard.blur();
                     return;
                 }
-                //持ち駒をクリックしたとき
+
+                //一手目に以前の二手目のチームと同じ駒がクリックされたとき無効
+                if (preventteam === currentCard.dataset.team){
+                    currentCard.blur();
+                    return;
+                }
+
                 if(!currentCard.id){
                     currentCard.id = `moti_${Date.now()}_${Math.random().toString(36).substring(2,9)}`;
                 }
+
                 firstId = currentCard.id;
-                console.log("1" + firstId);
-
-            //二手目
-            }else {
+            // 二手目
+            } else {
                 const secondId = currentCard.id;
-                console.log("2" + secondId);
-
                 const firstCard = document.getElementById(firstId);
-                const secondCard= document.getElementById(secondId);
+                const secondCard = document.getElementById(secondId);
 
-                //同じ駒をクリックしたとき
+                // 同じ駒をクリックしたとき
                 if (firstCard === secondCard){
                     if(firstId.startsWith("moti_")){
                         firstCard.removeAttribute("id");
@@ -366,40 +425,52 @@
                     return;
                 }
 
-                //正常にクリックできたとき
                 if (firstCard && secondCard){
-                    //持ち駒を盤面に配置する場合
+                    // 持ち駒を盤面に配置する場合
                     if(firstCard.id.startsWith("moti_")){
-                        if(secondCard.id.startsWith("mass_")&&secondCard.textContent===""){
-                            //二歩の禁止
-                            
-                            haiti(firstCard,secondCard);
+                        if(secondCard.id.startsWith("mass_") && secondCard.textContent === ""){
+                            //二歩の確認
+                            if(firstCard.role !== "hu" || nihu (firstId,secondId,firstCard)){
+                                haiti(firstCard,secondCard);
+                                preventteam = currentCard.dataset.team;
+                            }else{
+                                firstCard.removeAttribute("id");
+                                firstCard.blur();
+                                secondCard.blur();
+                                firstId = null;
+                                return;
+                            }
                         }else{
                             firstCard.removeAttribute("id");
                             firstCard.blur();
-                            secondCard.blur()
+                            secondCard.blur();
                         }
-                        firstId=null;
+                        firstId = null;
                         return;
                     }
 
+                    // 味方の駒を取ろうとしたときは拒否
+                    if (secondCard.textContent !== "" && firstCard.dataset.team === secondCard.dataset.team){
+                        firstCard.blur();                            
+                        secondCard.blur();
+                        firstId = null;
+                        return;
+                    }
+
+                    // 動けるルールに沿っているかチェック
                     if (!syurui(firstId,secondId,firstCard,secondCard)){
+                        warn.textContent = "そこには進めないよ!";
                         firstCard.blur();
                         secondCard.blur();
                         firstId = null;
                         return;
                     }
 
-                    //駒を空白に移動させる場合
-                    if (secondCard.textContent ===""){
+                    // 駒を空白に移動させる場合
+                    if (secondCard.textContent === ""){
                         koukan (firstCard,secondCard);
-                    //味方の駒を取ろうとしたとき
-                    } else if (firstCard.dataset.team === secondCard.dataset.team){
-                        firstCard.blur();                            
-                        secondCard.blur();
-                        firstId = null;
-                        return;
-                    //王・玉が取られたとき
+                        nari (firstId,secondId,secondCard)
+                    // 王・玉が取られたとき
                     }else if (secondCard.textContent === "王" || secondCard.textContent === "玉"){
                         result.textContent = "終了";
                         koukan(firstCard,secondCard);
@@ -407,36 +478,31 @@
                         secondCard.blur();
                         isGameOver = true;
                         return;
-                    //Bチームの駒を取った時
-                    }else if (firstCard.dataset.team ==="A"){
+                    // Bチームの駒を取った時
+                    }else if (firstCard.dataset.team === "A"){
                         motigomaAce (TeamA,motigomaA,firstCard,secondCard);
+                        nari (firstId,secondId,secondCard)
+                    // Aチームの駒を取った時
                     } else {
-                    //Aチームの駒を取った時
                         motigomaAce (TeamB,motigomaB,firstCard,secondCard);
+                        nari (firstId,secondId,secondCard)
                     }
+                    
                 }
-                firstId =null;
+                preventteam = currentCard.dataset.team;
+                firstId = null;
+                secondId = null;
             }
-            
         }
 
-        //手持ちを含めた盤上の駒を逐一チェックする処理
+        // イベントリスナーの一括登録
         document.querySelectorAll("#ban2 button").forEach((card)=>{
             card.addEventListener("click",(event)=>{
                 handleCardClick(event.currentTarget);
             });
         });
-
-        //二歩の処理
-        //dataset.teamのAとBを交互にする判定（一手目無効になった場合の処理）
-        //移動先の候補をbg-redとbg-blueで表示
-        //待った機能
-        //始めるボタン
-        //お助けボタン
-        //tailwindをより駒っぽくする
-        
-
-
     </script>
+
 </body>
-</html>
+
+</html> 
