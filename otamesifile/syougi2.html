@@ -245,20 +245,52 @@
         function syuruinari (secondCard){
             if(secondCard.role === "kyousya"){
                 secondCard.textContent = "成香";
+                secondCard.name = "narikyou";
                 secondCard.role = "kinn";
             }else if (secondCard.role === "keima"){
                 secondCard.textContent = "成桂";
+                secondCard.name = "narikei";
                 secondCard.role = "kinn";
             }else if (secondCard.role === "ginn"){
                 secondCard.textContent = "成銀";
+                secondCard.name = "nariginn";
                 secondCard.role = "kinn";
             }else if (secondCard.role === "hisya"){
                 secondCard.textContent = "竜王";
+                secondCard.name = "ryuuou";
             }else if (secondCard.role === "kaku"){
                 secondCard.textContent = "竜馬";
+                secondCard.name = "ryuuma";
             }else if (secondCard.role === "hu"){
             secondCard.textContent = "と金";
+            secondCard.name = "tokinn";
             secondCard.role = "kinn";
+            }
+        }
+        
+        function syuruimodosi (secondCard){
+            if(secondCard.name === "narikyou"){
+                secondCard.textContent = "香車";
+                secondCard.name = "kyousya";
+                secondCard.role = "kyousya";
+            }else if (secondCard.name === "narikei"){
+                secondCard.textContent = "桂馬";
+                secondCard.name = "keima";
+                secondCard.role = "keima";
+            }else if (secondCard.name === "nariginn"){
+                secondCard.textContent = "銀";
+                secondCard.name = "ginn";
+                secondCard.role = "ginn";
+            }else if (secondCard.name === "ryuuou"){
+                secondCard.textContent = "飛車";
+                secondCard.name = "hisya";
+            }else if (secondCard.name === "ryuuma"){
+                secondCard.textContent = "角";
+                secondCard.name = "kaku";
+            }else if (secondCard.name === "tokinn"){
+            secondCard.textContent = "歩";
+            secondCard.name = "hu";
+            secondCard.role = "hu";
             }
         }
 
@@ -291,7 +323,8 @@
             secondCard.textContent = firstCard.textContent;
             secondCard.dataset.team = firstCard.dataset.team;
             // role属性を移動先に引き継ぐ
-            secondCard.role = firstCard.role; 
+            secondCard.name = firstCard.name || "";
+            secondCard.role = firstCard.role ; 
 
             if (firstCard.classList.contains("rotate-180")){
                 secondCard.classList.add("rotate-180");
@@ -302,6 +335,7 @@
 
             firstCard.textContent = "";
             firstCard.dataset.team = "";
+            firstCard.name ="";
             firstCard.role = ""; 
 
             firstCard.blur();
@@ -311,10 +345,12 @@
         // 相手の駒を取って持ち駒にするときの挙動
         function motigomaAce (items,justify,firstCard,secondCard){
             const copyCard = document.createElement("button");
+            syuruimodosi (secondCard);
             copyCard.textContent = secondCard.textContent;
-            copyCard.className = "bg-amber-500 border font-serif flex justify-center items-center aspect-square focus:bg-blue-500 focus:text-white";
+            copyCard.className = "bg-amber-200 border font-serif flex justify-center items-center aspect-square focus:border-red-500";
             copyCard.dataset.moti = "true";
             // 元の駒のrole（種類）を持ち駒ボタンにも持たせる
+            copyCard.name = secondCard.name;
             copyCard.role = secondCard.role; 
 
             if (firstCard.dataset.team === "A"){
@@ -359,7 +395,7 @@
         for (let y=1;y<=9;y++){
             for(let x=1;x<=9;x++){
                 const card = document.createElement("button");
-                card.className = "bg-amber-200 font-serif border focus:bg-blue-500 focus:text-white"
+                card.className = "bg-amber-200 font-serif border focus:border-red-500"
                 card.textContent = "";
                 card.id=`mass_${x}_${y}`;
                 ban.appendChild(card);
@@ -501,6 +537,167 @@
                 handleCardClick(event.currentTarget);
             });
         });
+    </script>
+
+    <!-- コンピューター対戦機能（既存コードから独立した追加部分） -->
+    <script>
+        (() => {
+            const computerTeam = "A";
+            let computerMode = false;
+            let computerThinking = false;
+            let computerTimer = null;
+
+            const modeButton = document.createElement("button");
+            modeButton.type = "button";
+            modeButton.textContent = "対戦相手：人間";
+            modeButton.className = "fixed top-2 left-1/2 -translate-x-1/2 z-50 bg-slate-700 text-white px-4 py-2 rounded shadow";
+            document.body.appendChild(modeButton);
+
+            function isComputerTurn() {
+                return computerMode &&
+                    !isGameOver &&
+                    preventteam !== computerTeam;
+            }
+
+            function getBoardCards() {
+                return [...document.querySelectorAll("#ban button")];
+            }
+
+            function getComputerMoves() {
+                const boardCards = getBoardCards();
+                const moves = [];
+
+                const computerCards = boardCards.filter((card) =>
+                    card.textContent !== "" &&
+                    card.dataset.team === computerTeam
+                );
+
+                computerCards.forEach((firstCard) => {
+                    boardCards.forEach((secondCard) => {
+                        if (
+                            secondCard.textContent !== "" &&
+                            secondCard.dataset.team === computerTeam
+                        ) {
+                            return;
+                        }
+
+                        if (syurui(firstCard.id, secondCard.id, firstCard, secondCard)) {
+                            moves.push({
+                                firstCard,
+                                secondCard,
+                                score: secondCard.textContent === "" ? 0 : 10
+                            });
+                        }
+                    });
+                });
+
+                const heldCards = [...motigomaA.querySelectorAll("button")].filter(
+                    (card) => !card.classList.contains("hidden")
+                );
+
+                heldCards.forEach((firstCard) => {
+                    boardCards.forEach((secondCard) => {
+                        if (secondCard.textContent !== "") return;
+                        if (
+                            firstCard.role === "hu" &&
+                            !nihu(firstCard.id || "moti_0_0", secondCard.id, firstCard)
+                        ) {
+                            return;
+                        }
+
+                        moves.push({
+                            firstCard,
+                            secondCard,
+                            score: 1
+                        });
+                    });
+                });
+
+                return moves;
+            }
+
+            function selectComputerMove(moves) {
+                const bestScore = Math.max(...moves.map((move) => move.score));
+                const bestMoves = moves.filter((move) => move.score === bestScore);
+                return bestMoves[Math.floor(Math.random() * bestMoves.length)];
+            }
+
+            function queueComputerMove() {
+                if (!isComputerTurn() || computerTimer !== null) return;
+
+                computerTimer = setTimeout(() => {
+                    computerTimer = null;
+                    computerMove();
+                }, 700);
+            }
+
+            function computerMove() {
+                if (!isComputerTurn()) return;
+
+                const moves = getComputerMoves();
+                if (moves.length === 0) {
+                    result.textContent = "コンピューターは動かせません";
+                    return;
+                }
+
+                const move = selectComputerMove(moves);
+                computerThinking = true;
+                handleCardClick(move.firstCard);
+
+                setTimeout(() => {
+                    handleCardClick(move.secondCard);
+                    computerThinking = false;
+                }, 400);
+            }
+
+            const originalHandleCardClick = handleCardClick;
+
+            handleCardClick = function (currentCard) {
+                if (
+                    computerMode &&
+                    !computerThinking &&
+                    firstId === null &&
+                    currentCard.dataset.team === computerTeam
+                ) {
+                    currentCard.blur();
+                    return;
+                }
+
+                const previousTeam = preventteam;
+
+                try {
+                    originalHandleCardClick(currentCard);
+                } catch (error) {
+                    const existingSecondIdError =
+                        error instanceof TypeError &&
+                        error.message.toLowerCase().includes("constant");
+
+                    if (!existingSecondIdError) throw error;
+                }
+
+                if (
+                    !computerThinking &&
+                    firstId === null &&
+                    previousTeam !== preventteam
+                ) {
+                    queueComputerMove();
+                }
+            };
+
+            modeButton.addEventListener("click", () => {
+                computerMode = !computerMode;
+                modeButton.textContent = computerMode
+                    ? "対戦相手：コンピューター"
+                    : "対戦相手：人間";
+
+                if (computerMode) {
+                    queueComputerMove();
+                } else if (computerTimer !== null) {
+                    clearTimeout(computerTimer);
+                    computerTimer = null;
+                }
+            });
+        })();
     </script>
 
 </body>
