@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Userinput</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen bg-slate-200 flex justify-center items-center">
+    <article class="bg-white rounded-xl shadow-xl p-10">
+        <header class="mx-auto">
+            <h1 class="text-2xl mb-5">ユーザー登録フォーム</h1>
+        </header>
+        
+        <form id="regForm" class="flex flex-col items-center" novalidate>
+            <label for="namefirst" class="block">名前</label>
+            <input id="namefirst" type="text" required>
+            <label for="namesecond" class="block">ナマエ</label>
+            <input id="namesecond" type="text" required>
+            <label for="mail">メールアドレス入力欄</label>
+            <input id="mail" type="email" required>
+            <label for="pass1">パスワード入力欄</label>
+            <input id="pass1" type="password" minlength="8" required>
+            <label for="pass2">パスワード入力欄（確認用）</label>
+            <input id="pass2" type="password" minlength="8" required>
+            <a href="#" class="block text-blue-500 hover:text-blue-700">利用規約</a>
+            <div class="space-x-1">
+                <label for="agree">同意する</label>
+                <input id="agree" type="checkbox" required>
+            </div>
+            <button type="submit" class="bg-blue-500 text-white rounded-xl shadow px-5 py-2 hover:bg-blue-700 mt-4">送信</button>
+            <p id="warn" class="mt-4 font-bold"></p>
+        </form>
+    </article>
+
+    <script>
+        const form = document.querySelector("#regForm");
+        const required = document.querySelectorAll("[required]");
+        const warn = document.querySelector("#warn");
+
+        required.forEach((e) => {
+            if (e.type !== "checkbox") {
+                e.className = "border rounded pl-1 mb-4 w-full"; 
+            } else {
+                e.className = "mt-1 mb-5";
+            }
+        });
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            
+            const namefirst = document.querySelector("#namefirst").value;
+            const namesecond = document.querySelector("#namesecond").value;
+            const mail = document.querySelector("#mail").value;
+            const pass1 = document.querySelector("#pass1").value;
+            const pass2 = document.querySelector("#pass2").value;
+            const isAgreed = document.querySelector("#agree").checked; 
+            
+            warn.classList.remove("text-green-500", "text-red-500");
+
+            if (namefirst === "") {
+                warn.classList.add("text-red-500");
+                warn.textContent = "名前が入力されていません";
+                return;
+            } else if (namesecond === "") {
+                warn.classList.add("text-red-500");
+                warn.textContent = "ナマエが入力されていません";
+                return;
+            } else if (mail === "") {
+                warn.classList.add("text-red-500");
+                warn.textContent = "メールアドレスが入力されていません";
+                return;
+            } else if (pass1 === "") {
+                warn.classList.add("text-red-500");
+                warn.textContent = "パスワードが入力されていません";
+                return;
+            } else if (pass2 === "") {
+                warn.classList.add("text-red-500");
+                warn.textContent = "確認用パスワードが入力されていません";
+                return;
+            } else if (pass1 !== pass2) {
+                warn.classList.add("text-red-500");
+                warn.textContent = "パスワードが一致していません";
+                return;
+            } else if (pass1.length<8) {
+                warn.classList.add("text-red-500");
+                warn.textContent = "パスワードを８文字以上入力してください";
+                return;
+            } else if (!isAgreed) {
+                warn.classList.add("text-red-500");
+                warn.textContent = "利用規約に同意してください";
+                return;
+            } else {
+                warn.classList.add("text-green-500");
+                warn.textContent = "情報が送信されました";
+            }
+        });
+    </script>
+</body>
+</html>
