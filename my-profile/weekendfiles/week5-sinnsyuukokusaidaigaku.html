@@ -8,31 +8,31 @@
     </head>
     <body>
         <header>
-            <section class="bg-white w-80 flex flex-row items-center gap-20 px-10 py-3">
-                <img src="./sinnsyuukokusaidaigaku/logo.png" alt="logo">
-                    <img src="./sinnsyuukokusaidaigaku/icon_twitter.png" alt="twitter" class="rounded-lg w-10">
+            <section class="bg-white w-full flex flex-col md:flex-row items-center gap-4 md:gap-20 px-4 md:px-10 py-3">
+                <a href="https://kokushin-u.jp/" class="transition-opacity hover:opacity-70"><img src="./imgs for week/kokusin-logo.png" alt="logo" class="h-20"></a>
+                    <a href="https://twitter.com/kokushin_univ" class="transition-opacity hover:opacity-70"><img src="./imgs for week/kokusin-twitter.png" alt="twitter" class="rounded-lg w-10"></a>
             </section>
 
-            <section class="bg-lime-600 text-white text-xl flex flex-row gap-20 px-10 py-5">
-                <span class="">ホーム</span>
-                <span class="">受験生の方へ</span>
-                <span class="">生活・就職</span>
-                <span class="">学部一覧</span>
-                <span class="">教員</span>
-                <span class="">アクセス</span>
+            <section class="bg-lime-600 text-white text-xl flex flex-col md:flex-row gap-2 md:gap-20 px-4 md:px-10 py-5">
+                <a href="https://kokushin-u.jp/" class="hover:bg-lime-800">ホーム</a>
+                <a href="https://kokushin-u.jp/prospective-student/" class="hover:bg-lime-800">受験生の方へ</a>
+                <a href="https://kokushin-u.jp/living-career/" class="hover:bg-lime-800">生活・就職</a>
+                <a href="https://kokushin-u.jp/cources/" class="hover:bg-lime-800">学部一覧</a>
+                <a href="https://kokushin-u.jp/profs/" class="hover:bg-lime-800">教員</a>
+                <a href="https://kokushin-u.jp/contact/access/" class="hover:bg-lime-800">アクセス</a>
             </section>
         </header>
 
-        <img src="./sinnsyuukokusaidaigaku/3.jpg" alt="syasinn" class="w-full">
+        <img src="./imgs for week/kokusin-main.jpg" alt="syasinn" class="w-full">
 
-        <main class="grid grid-cols-4 gap-10 pt-3 px-5">
+        <main class="grid grid-cols-1 md:grid-cols-4 gap-10 pt-3 px-5">
             <section class="flex flex-col col-span-1">
                 <div class="flex flex-col">
                     <span class="bg-neutral-600 text-white text-3xl p-5">サイト内の検索</span>
-                    <div class="bg-white flex flex-row p-5 gap-3">
-                        <span class="text-white border border-black px-10">Resarch</span>
-                        <span class="bg--500 border border-black">検索</span>
-                    </div>
+                    <form action="https://kokushin-u.jp/" method="get" class="bg-white flex flex-row p-5 gap-3">
+                        <input type="search" name="s" placeholder="検索する言葉を入力" aria-label="サイト内検索" class="min-w-0 w-full border border-black px-2">
+                        <button type="submit" class="border border-black hover:bg-gray-200">検索</button>
+                    </form>
                 </div>
 
                 <div class="flex flex-col text-2xl">
@@ -87,10 +87,10 @@
                         <span>お問い合わせについて</span>
                     </ul>
 
-                    <div class="text-base bg-white flex flex-row p-5 gap-3">
-                        <span class="text-white border border-black px-10">Resarch</span>
-                        <span class="bg--500 border border-black">検索</span>
-                    </div>
+                    <form action="https://kokushin-u.jp/" method="get" class="text-base bg-white flex flex-row p-5 gap-3">
+                        <input type="search" name="s" placeholder="検索する言葉を入力" aria-label="サイト内検索" class="min-w-0 w-full border border-black px-2">
+                        <button type="submit" class="border border-black hover:bg-gray-200">検索</button>
+                    </form>
                 </div>
 
                 <div class="flex flex-col">
@@ -99,12 +99,12 @@
                         <div class="flex flex-col gap-5">
                             <span class="text-2xl">出願中の方は</span>
                             <span class="text-2xl">こちら</span>
-                            <span class="w-1/2 bg-blue-500 text-white rounded-md border-blue-600">出願ページ</span>
+                            <a href="https://kokushin-u.jp/mypage/" class="w-1/2 bg-blue-500 text-white rounded-md border-blue-600 hover:bg-blue-700">出願ページ</a>
                         </div>
                         <div class="flex flex-col gap-5">
                             <span class="text-2xl">本学学生は</span>
                             <span class="text-2xl">こちら</span>
-                            <span class="w-1/2 bg-blue-500 text-white rounded-md border-blue-600">出願ページ</span>
+                            <a href="https://kokushin-u.jp/campus-menu/" class="w-1/2 bg-blue-500 text-white rounded-md border-blue-600 hover:bg-blue-700">出願ページ</a>
                         </div>
                     </div>
 
@@ -127,11 +127,11 @@
 
 
             
-            <section class="col-span-3 flex flex-col">
+            <section class="md:col-span-3 flex flex-col min-w-0">
                 <div class="text-2xl flex flex-col items-center gap-3">
                     <span class="bg-lime-600 w-full text-white text-3xl py-3 px-5">| 国際信州大学の概要</span>
                     <span class="text-2xl pt-3">学歌 学長の言葉 研究提携</span>
-                    <img src="./sinnsyuukokusaidaigaku/girl.jpg" alt="girl">
+                    <img src="./imgs for week/kokusin-girl.png" alt="girl" class="max-w-full">
                     <span>信州から世界-フランス-へ羽ばたく人材を育てたい</span>
                     <span>自主性と規律を重んじていたのは今や昔</span>
                     <span>自由な発想で今までにない思想を作り出す</span>
@@ -141,37 +141,37 @@
                     <span class="text-lg">2026年 新年のご挨拶</span>
                 </div>
 
-                <div class="grid grid-cols-2 text-3xl p-5">
-                    <div class="flex flex-col">
+                <div class="grid grid-cols-1 text-3xl p-5 gap-5">
+                    <a href="https://twitter.com/kokushin_univ" class="flex flex-col hover:bg-gray-200">
                         <span class="w-2/3 bg-black text-white rounded-full p-5">本学公式Twitter(現𝕏)</span>
                         <span class="pl-5 pr-20 text-2xl pt-3">皆様へのお知らせや更新情報をポストしています。</span>
-                    </div>
+                    </a>
 
-                    <div class="flex flex-col">
+                    <a href="https://admission.kokushin-u.jp/" class="flex flex-col hover:bg-amber-100">
                         <span class="w-2/3 bg-amber-400  rounded-full p-5">ネット出願システム</span>
                         <span class="pl-5 pr-20 text-2xl pt-3">ネット出願システムよりPDF受験票の発行と合否確認ができます。</span>
-                    </div>
+                    </a>
                 </div>
 
                 <div class="p-10 flex flex-col">
                     <span class="bg-lime-600 w-full text-white text-3xl py-3 px-5">| 国信大のTOPICS</span>
 
-                    <div class=" grid grid-cols-3 gap-20 pt-5">
-                        <div class="flex flex-col text-2xl">
-                            <img src="./sinnsyuukokusaidaigaku/honngakunorekisi.jpg" alt="honngakunorekisi">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-20 pt-5">
+                        <a href="https://kokushin-u.jp/history/" class="flex flex-col text-2xl hover:bg-lime-100">
+                            <img src="./imgs for week/kokusin-history.jpg" alt="honngakunorekisi" class="h-40 w-full object-cover">
                             <span class=" py-5">本学の歴史</span>
                             <span>本学121年の歴史</span>
-                        </div>
-                        <div class="flex flex-col text-2xl">
-                            <img src="./sinnsyuukokusaidaigaku/nyuusiannnai.jpg" alt="nyuusiannnai">
+                        </a>
+                        <a href="https://kokushin-u.jp/prospective-student/" class="flex flex-col text-2xl hover:bg-lime-100">
+                            <img src="./imgs for week/kokusin-admission.jpg" alt="nyuusiannnai" class="h-40 w-full object-cover">
                             <span class="py-5">入試案内</span>
                             <span>志願者速報の公開を開始</span>
-                        </div>
-                        <div class="flex flex-col text-2xl">
-                            <img src="./sinnsyuukokusaidaigaku/kennkyuuteikei.jpg" alt="kennkyuuteikei">
+                        </a>
+                        <a href="https://kokushin-u.jp/about/research-tieup/" class="flex flex-col text-2xl hover:bg-lime-100">
+                            <img src="./imgs for week/kokusin-research.jpg" alt="kennkyuuteikei" class="h-40 w-full object-cover">
                             <span class=" py-5">研究提携</span>
                             <span>フランスとの提携を強化しております</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
 
@@ -181,7 +181,7 @@
                     <div >
                         <span class="text-lime-600">2026/04/30</span>
                         <span class="bg-gray-600 text-white text-sm">未分類</span>
-                        <div class="text-2xl flex flex-col pl-40">
+                        <div class="text-2xl flex flex-col pl-0 md:pl-40">
                             <span class="font-bold">BeRealジャマーの本格運用を開始します。</span>
                             <span>授業中にBeRealを使用する学生に対し、教員や他の学生からの苦情が相次いだため、2024年から試験運用を進めていた携帯電話抑止装置の本格運用を5月1日から開始いたします。これにより適正な授業環境が期待されます。参考： […]</span>
                         </div>
@@ -190,7 +190,7 @@
                     <div>
                         <span class="text-lime-600">2026/04/04</span>
                         <span class="bg-gray-600 text-white text-sm">重要</span>
-                        <div class="text-2xl flex flex-col pl-40">
+                        <div class="text-2xl flex flex-col pl-0 md:pl-40">
                             <span class="font-bold">【緊急のお知らせ】文部科学省の資料に「私立国際信州学院大学付属高校」の名称が記載されている旨の報道について</span>
                             <span>文部科学省の資料に「私立国際信州学院大学付属高校」の名称が記載されている旨の報道がございますが、現時点で本学に付属高校は存在しません。また、過去においても付属高校や系列の学校等が存在した事実はございません。引き続き事実 […]</span>
                         </div>
@@ -199,7 +199,7 @@
                     <div>
                         <span class="text-lime-600">2026/03/04</span>
                         <span class="bg-gray-600 text-white text-sm">研究分野</span>
-                        <div class="text-2xl flex flex-col pl-40">
+                        <div class="text-2xl flex flex-col pl-0 md:pl-40">
                             <span class="font-bold">国信大平和記念館は入館無料です</span>
                             <span>本学に設置されている国信大平和記念館は博物館法上の位置付けがある登録博物館・指定施設ではありませんが、平和に関する貴重な資料の所蔵・研究・展示を行っており、どなたでも無料で入館いただけます。学内の施設ではありますが、学生 […]</span>
                         </div>
@@ -208,7 +208,7 @@
                     <div >
                         <span class="text-lime-600">2026/01/01</span>
                         <span class="bg-gray-600 text-white text-sm">お知らせ</span>
-                        <div class="text-2xl flex flex-col pl-40">
+                        <div class="text-2xl flex flex-col pl-0 md:pl-40">
                             <span class="font-bold">2026年 新年のご挨拶</span>
                             <span>新春の候、皆さまにおかれましては益々ご清祥のこととお喜び申し上げます。 平素より国際信州学院大学の教育・研究活動にご理解とご支援を賜り、心より御礼申し上げます。  本学は創立以来、地域に根ざした大学経営を重視し、「信州から […]</span>
                         </div>
@@ -217,7 +217,7 @@
                     <div>
                         <span class="text-lime-600">2025/11/19</span>
                         <span class="bg-gray-600 text-white text-sm">重要</span>
-                        <div class="text-2xl pl-40">
+                        <div class="text-2xl pl-0 md:pl-40">
                             <span class="font-bold">通信障害時の情報発信について</span>
                             <span>本学では公式サイト（当サイト）、X（旧ツイッター）を中心に情報発信を行っております。これらに通信障害が発生した場合、緊急のお知らせについては学内ポータル、学内外掲示板、チャット、telnet、電話を用いて発信を行います。 […]</span>
                         </div>
@@ -232,7 +232,7 @@
         </main>
         
         <footer class="pt-10">
-            <section class="w-full flex gap-5 px-10">
+            <section class="w-full flex flex-col md:flex-row md:flex-wrap gap-5 px-4 md:px-10">
                 <span>ホーム</span> 
                 <span>学費</span> 
                 <span>学部一覧</span> 
