@@ -1,16 +1,33 @@
-# React + Vite
+# Week 15 タスク管理アプリ
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React と Vite のテンプレートを使ったタスク管理アプリです。Tailwind CSS は pnpm でインストールし、`@tailwindcss/vite` プラグインから読み込んでいます。
 
-Currently, two official plugins are available:
+## セットアップ
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+新規作成する場合のコマンド:
 
-## React Compiler
+```bash
+pnpm create vite week15-POSSEkadai --template react
+cd week15-POSSEkadai
+pnpm install
+pnpm add -D tailwindcss @tailwindcss/vite
+```
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+このプロジェクトを起動する場合:
 
-## Expanding the Oxlint configuration
+```bash
+pnpm install
+pnpm run dev
+```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+本番用ファイルの作成は `pnpm run build` で行います。
+
+## 機能
+
+- 入力欄からボタンまたは Enter でタスクを追加（空白だけの入力は追加しない）
+- タスクの完了切り替えと削除
+- すべて・未完了・完了済みの表示切り替え
+- `useEffect` と `localStorage` による保存
+- タスク1件の表示を `TaskItem` コンポーネントに分離
+
+タスク配列は `setTasks` と `map`・`filter`・スプレッド構文で更新しています。
